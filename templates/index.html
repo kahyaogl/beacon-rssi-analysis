@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beacon Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 16px 0 24px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        h1, h2 {
+            margin-top: 0;
+        }
+
+        .muted {
+            color: #6b7280;
+        }
+
+        .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .chart-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 16px;
+            background: #2563eb;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .button.secondary {
+            background: #0f172a;
+        }
+
+        #data p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Beacon Veri Paneli</h1>
+        <p class="muted">Canlı veri Socket.IO ile anlık güncellenir. Sayfa açılışında geçmiş kayıtlar bir kez yüklenir.</p>
+
+        <div class="grid">
+            <div class="card">
+                <h2>Canlı Veri</h2>
+                <div id="data">Veri bekleniyor...</div>
+            </div>
+            <div class="card">
+                <div class="muted">Mesafe</div>
+                <div class="value" id="distanceValue">-</div>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h2> Mesafe Grafiği</h2>
+            <canvas id="historyChart" height="110"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h2>Veri Tablosu</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Zaman</th>
+                            <th>MAC</th>
+                            <th>Gateway</th>
+                            <th>RSSI</th>
+                            <th> Mesafe</th>
+                            <th>ML Algoritma</th>
+                            
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="8">Veri yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
